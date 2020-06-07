@@ -1,0 +1,4 @@
+rootProject.name='DataValidationKotlin'
+include ':app'
+include ':datavalidation-processor'
+include ':datavalidation-annotation'
