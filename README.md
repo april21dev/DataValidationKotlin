@@ -1,2 +1,2 @@
 # DataValidationKotlin
-validating kotlin model using annotation processing
+validating android kotlin model using annotation processing
