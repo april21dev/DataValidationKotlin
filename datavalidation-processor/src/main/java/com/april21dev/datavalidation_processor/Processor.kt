@@ -52,12 +52,9 @@ class Processor : AbstractProcessor() {
 
         val classElements = roundEnv.getElementsAnnotatedWith(DataValidation::class.java)
 
-
         if (!checkElementType(ElementKind.CLASS, classElements)) return false
 
-        classElements.forEach {
-            fileBuilder.addFunction(makeFunctionSpec(it))
-        }
+        classElements.forEach { fileBuilder.addFunction(makeValidateFunction(it)) }
 
         fileBuilder.addImport(FieldNameAndTag::class.java, "")
         val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
@@ -65,15 +62,13 @@ class Processor : AbstractProcessor() {
         return true
     }
 
-    //Nested Class 가 Annotation 을 가지고 있으면.. 재귀? visitor?
-    private fun makeFunctionSpec(classElement: Element): FunSpec {
+    private fun makeValidateFunction(classElement: Element): FunSpec {
         val validateFunSpec = FunSpec.builder("validate")
             .receiver(classElement.asType().asTypeName())
             .returns(ValidationResult::class)
             .addStatement("val result = %T()", ValidationResult::class.java)
 
         val fieldElement = classElement.enclosedElements
-
         fieldElement.forEach {
             val nonNull = it.getAnnotation(NotNull::class.java)
             val minLength = it.getAnnotation(MinLength::class.java)

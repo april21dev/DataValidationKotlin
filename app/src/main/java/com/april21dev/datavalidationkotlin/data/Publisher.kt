@@ -5,6 +5,6 @@ import com.april21dev.datavalidation_annotation.annotation.MaxLength
 
 @DataValidation
 data class Publisher(
-    @MaxLength(10, "name is too long")
+    @MaxLength(10, "publisher name is too long")
     val name: String
 )
